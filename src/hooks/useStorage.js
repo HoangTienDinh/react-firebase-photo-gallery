@@ -6,9 +6,28 @@ const useStorage = (file) => {
   const [error, setError] = useState(null);
   const [url, setUrl] = useState(null);
 
-  useEffect = (() => {
+  useEffect =
+    (() => {
+      // references
+      const storageRef = projectStorage.ref(file.name);
 
-  }, [file])
+      storageRef.put(file).on(
+        "state_changed",
+        (snap) => {
+          // this is the percentage of the file being uploaded
+          let percentage = (snap.bytesTransferred / snap.totalBytes) * 100;
+          setProgress(percentage);
+        },
+        (err) => {
+          setError(err);
+        },
+        async () => {
+          const url = await storageRef.getDownloadURL();
+          setUrl(url);
+        }
+      );
+    },
+    [file]);
 
-
+  return { progress, url, error };
 };
