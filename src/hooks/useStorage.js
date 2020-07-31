@@ -6,8 +6,7 @@ const useStorage = (file) => {
   const [error, setError] = useState(null);
   const [url, setUrl] = useState(null);
 
-  useEffect =
-    (() => {
+  useEffect(() => {
       // references
       const storageRef = projectStorage.ref(file.name);
 
